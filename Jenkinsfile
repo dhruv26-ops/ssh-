@@ -1,15 +1,31 @@
 pipeline {
   agent any
+
+  environment {
+    VENV_DIR = 'venv'
+  }
+
   stages {
-    stage('Install') {
+    stage('Clone Repo') {
       steps {
-        sh 'python3 -m venv venv'
-        sh './venv/bin/pip install -r requirements.txt'
+        echo 'Cloning repository...'
+        checkout scm
       }
     }
-    stage('Run') {
+
+    stage('Set Up Python Environment') {
       steps {
-        sh './venv/bin/python app.py'
+        echo 'Creating virtual environment...'
+        sh 'python3 -m venv $VENV_DIR'
+        sh './$VENV_DIR/bin/pip install --upgrade pip'
+        sh './$VENV_DIR/bin/pip install -r requirements.txt || true'
+      }
+    }
+
+    stage('Run App') {
+      steps {
+        echo 'Running Python app...'
+        sh './$VENV_DIR/bin/python app.py'
       }
     }
   }
