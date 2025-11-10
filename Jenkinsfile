@@ -1,23 +1,16 @@
 pipeline {
-  agent any
-
-  environment {
-    VENV_DIR = 'venv'
-  }
-
-  stages {
-    stage('Clone Repo') {
-      steps {
-        echo 'Cloning repository...'
-        checkout scm
-      }
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/dhruv26-ops/ssh-/edit/master/Jenkinsfile'
+            }
+        }
+        stage('Run Python App') {
+            steps {
+                sh 'python3 app.py'
+            }
+        }
     }
-
-    stage('Run App') {
-      steps {
-        echo 'Running Python app...'
-        sh './$VENV_DIR/bin/python app.py'
-      }
-    }
-  }
 }
+
