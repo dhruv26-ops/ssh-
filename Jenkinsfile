@@ -4,22 +4,27 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone the repository
                 checkout scm
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Python Environment') {
             steps {
-                // Optional: install dependencies if you have requirements.txt
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Python App') {
             steps {
-                // Run your Python script
-                sh 'python3 app.py'
+                sh '''
+                    . venv/bin/activate
+                    python app.py
+                '''
             }
         }
     }
