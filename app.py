@@ -2,5 +2,5 @@ def add(a, b):
     return a + b
 
 if __name__ == "__main__":
-    result = add(5, 6)
+    result = add(5, 9)
     print("Result:", result)
